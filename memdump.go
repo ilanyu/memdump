@@ -14,8 +14,8 @@ func main() {
 	end_addr_hex := flag.String("eaddr", "0", "end addr(hex)")
 	fileName := flag.String("filename", "memdump.mem", "filename")
 	flag.Parse()
-	start_addr,_ := strconv.ParseInt(*start_addr_hex, 16, 64)
-	end_addr,_ := strconv.ParseInt(*end_addr_hex, 16, 64)
+	start_addr, _ := strconv.ParseInt(*start_addr_hex, 16, 64)
+	end_addr, _ := strconv.ParseInt(*end_addr_hex, 16, 64)
 	length := end_addr - start_addr
 	if err := syscall.PtraceAttach(*pid); err != nil {
 		fmt.Errorf("PtraceAttach is err: %s", err)
@@ -35,7 +35,7 @@ func main() {
 		fmt.Errorf("Read is err: %s", err)
 	}
 	fmt.Println("read " + strconv.Itoa(n))
-	fpw, err := os.OpenFile(*fileName, os.O_RDONLY|os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0755)
+	fpw, err := os.OpenFile(*fileName, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
 	defer fpw.Close()
 	fpw.Write(buf)
 	if err := syscall.PtraceDetach(*pid); err != nil {
